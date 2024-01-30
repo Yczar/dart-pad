@@ -308,147 +308,74 @@ class _DartPadMainPageState extends State<DartPadMainPage> {
         children: [
           Expanded(
             child: Center(
-              child: SplitView(
-                viewMode: SplitViewMode.Horizontal,
-                gripColor: theme.dividerTheme.color!,
-                gripColorActive: theme.dividerTheme.color!,
-                gripSize: defaultGripSize,
-                controller: mainSplitter,
+              child: Column(
                 children: [
-                  Column(
-                    children: [
-                      Expanded(
-                        child: SectionWidget(
-                          child: Stack(
-                            children: [
-                              EditorWidget(
-                                appModel: appModel,
-                                appServices: appServices,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(denseSpacing),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  // We use explicit directionality here in
-                                  // order to have the format and run buttons on
-                                  // the right hand side of the editing area.
-                                  textDirection: TextDirection.ltr,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Format action
-                                    ValueListenableBuilder<bool>(
-                                      valueListenable: appModel.formattingBusy,
-                                      builder: (_, bool value, __) {
-                                        return PointerInterceptor(
-                                          child: MiniIconButton(
-                                            icon: Icons.format_align_left,
-                                            tooltip: 'Format',
-                                            small: true,
-                                            onPressed: value
-                                                ? null
-                                                : _handleFormatting,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    const SizedBox(width: defaultSpacing),
-                                    // Run action
-                                    ValueListenableBuilder<bool>(
-                                      valueListenable: appModel.compilingBusy,
-                                      builder: (_, bool value, __) {
-                                        return PointerInterceptor(
-                                          child: RunButton(
-                                            onPressed: value
-                                                ? null
-                                                : _performCompileAndRun,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.bottomRight,
-                                padding: const EdgeInsets.all(denseSpacing),
-                                child: StatusWidget(
-                                  status: appModel.editorStatus,
-                                ),
-                              ),
-                            ],
+                  Expanded(
+                    child: SectionWidget(
+                      child: Stack(
+                        children: [
+                          EditorWidget(
+                            appModel: appModel,
+                            appServices: appServices,
                           ),
-                        ),
-                      ),
-                      ValueListenableBuilder<List<AnalysisIssue>>(
-                        valueListenable: appModel.analysisIssues,
-                        builder: (context, issues, _) {
-                          return ProblemsTableWidget(problems: issues);
-                        },
-                      ),
-                    ],
-                  ),
-                  Stack(
-                    children: [
-                      ValueListenableBuilder(
-                        valueListenable: appModel.layoutMode,
-                        builder: (context, LayoutMode mode, _) {
-                          return LayoutBuilder(builder: (BuildContext context,
-                              BoxConstraints constraints) {
-                            final domHeight =
-                                mode.calcDomHeight(constraints.maxHeight);
-                            final consoleHeight =
-                                mode.calcConsoleHeight(constraints.maxHeight);
-
-                            return Column(
+                          Padding(
+                            padding: const EdgeInsets.all(denseSpacing),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              // We use explicit directionality here in
+                              // order to have the format and run buttons on
+                              // the right hand side of the editing area.
+                              textDirection: TextDirection.ltr,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  height: domHeight,
-                                  child: ListenableBuilder(
-                                      listenable: appModel.splitViewDragState,
-                                      builder: (context, _) {
-                                        return ExecutionWidget(
-                                          appServices: appServices,
-                                          // Ignore pointer events while the Splitter
-                                          // is being dragged.
-                                          ignorePointer: appModel
-                                                  .splitViewDragState.value ==
-                                              SplitDragState.active,
-                                        );
-                                      }),
+                                // Format action
+                                ValueListenableBuilder<bool>(
+                                  valueListenable: appModel.formattingBusy,
+                                  builder: (_, bool value, __) {
+                                    return PointerInterceptor(
+                                      child: MiniIconButton(
+                                        icon: Icons.format_align_left,
+                                        tooltip: 'Format',
+                                        small: true,
+                                        onPressed:
+                                            value ? null : _handleFormatting,
+                                      ),
+                                    );
+                                  },
                                 ),
-                                SizedBox(
-                                  height: consoleHeight,
-                                  child: ConsoleWidget(
-                                    showDivider: mode == LayoutMode.both,
-                                    textController:
-                                        appModel.consoleOutputController,
-                                  ),
+                                const SizedBox(width: defaultSpacing),
+                                // Run action
+                                ValueListenableBuilder<bool>(
+                                  valueListenable: appModel.compilingBusy,
+                                  builder: (_, bool value, __) {
+                                    return PointerInterceptor(
+                                      child: RunButton(
+                                        onPressed: value
+                                            ? null
+                                            : _performCompileAndRun,
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
-                            );
-                          });
-                        },
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.bottomRight,
+                            padding: const EdgeInsets.all(denseSpacing),
+                            child: StatusWidget(
+                              status: appModel.editorStatus,
+                            ),
+                          ),
+                        ],
                       ),
-                      ValueListenableBuilder<bool>(
-                        valueListenable: appModel.compilingBusy,
-                        builder: (_, bool compiling, __) {
-                          final color = theme.colorScheme.surface;
-
-                          return AnimatedContainer(
-                            color: compiling
-                                ? color.withOpacity(0.8)
-                                : color.withOpacity(0.0),
-                            duration: animationDelay,
-                            curve: animationCurve,
-                            child: compiling
-                                ? const GoldenRatioCenter(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : const SizedBox(width: 1),
-                          );
-                        },
-                      ),
-                    ],
+                    ),
+                  ),
+                  ValueListenableBuilder<List<AnalysisIssue>>(
+                    valueListenable: appModel.analysisIssues,
+                    builder: (context, issues, _) {
+                      return ProblemsTableWidget(problems: issues);
+                    },
                   ),
                 ],
               ),
