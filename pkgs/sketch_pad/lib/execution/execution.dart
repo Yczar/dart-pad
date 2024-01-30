@@ -27,19 +27,19 @@ void _initViewFactory() {
   ui_web.platformViewRegistry.registerViewFactory(_viewType, _iFrameFactory);
 }
 
-web.Element _iFrameFactory(int viewId) {
+web.Element? _iFrameFactory(int viewId) {
   // 'allow-popups' allows plugins like url_launcher to open popups.
-  final frame = web_helpers.createIFrameElement()
-    ..sandbox.add('allow-scripts')
-    ..sandbox.add('allow-popups')
-    ..src = 'frame.html'
-    ..style.border = 'none'
-    ..style.width = '100%'
-    ..style.height = '100%';
+  // final frame = web_helpers.()
+  //   ..sandbox.add('allow-scripts')
+  //   ..sandbox.add('allow-popups')
+  //   ..src = 'frame.html'
+  //   ..style.border = 'none'
+  //   ..style.width = '100%'
+  //   ..style.height = '100%';
 
-  executionServiceInstance = ExecutionServiceImpl(frame);
+  // executionServiceInstance = ExecutionServiceImpl(frame);
 
-  return frame;
+  return null;
 }
 
 class ExecutionWidget extends StatefulWidget {
