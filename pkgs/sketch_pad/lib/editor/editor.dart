@@ -43,7 +43,7 @@ web.Element _codeMirrorFactory(int viewId) {
         'mode': 'dart',
         'theme': 'darkpad',
         ...codeMirrorOptions,
-      }.jsify());
+      }.jsify() as JSAny);
 
   CodeMirror.commands.goLineLeft =
       ((JSObject? _) => _handleGoLineLeft(codeMirrorInstance!)).toJS;
