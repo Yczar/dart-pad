@@ -3,7 +3,7 @@ description: An experimental redux of the DartPad UI.
 publish_to: none
 
 environment:
-  sdk: ^3.2.0
+  sdk: ^3.2.6
 
 dependencies:
   collection: any
@@ -38,3 +38,4 @@ flutter:
 dependency_overrides:
   dartpad_shared:
     path: ../dartpad_shared
+  web: 0.3.0
